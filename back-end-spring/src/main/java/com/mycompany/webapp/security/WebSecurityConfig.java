@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		//서버 세션 비활성화
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션을 이용해서 상태정보를 저장하지 않겠다..
 		//csrf : post 방식으로 전송할 때 key를 폼태그에 실을 때; 
-		//사이트간 요청 위조 방지 비활성화 - 어차피 form tag를 쓰는 것도 아니고 다양한 방식을 쓸것이므로
+		//사이트간 요청 위조 방지를 위해 비활성화 - 어차피 form tag를 쓰는 것도 아니고 다양한 방식을 쓸것이므로
 		http.csrf().disable();
 		//CORS(교차 출처 리소스 공유) 설정(다른 도메인에서 요청을 허가) a 서버에서 받은 html에서 b에 데이터를 요청할 경우 허가를 받아야.. 기본적으론 요청을 못함
 		http.cors(); //cors 활성화 + 설정도 하셔야합니다.
@@ -61,9 +61,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.PUT, "/boards").hasAnyRole("USER")
 			.antMatchers(HttpMethod.DELETE, "/boards/*").hasAnyRole("USER")
 	
-			.antMatchers(HttpMethod.POST, "/products").hasAnyRole("ADMIN")
-			.antMatchers(HttpMethod.PUT, "/products").hasAnyRole("ADMIN")
-			.antMatchers(HttpMethod.DELETE, "/products/*").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.POST, "/products").hasAnyRole("USER")
+			.antMatchers(HttpMethod.PUT, "/products").hasAnyRole("USER")
+			.antMatchers(HttpMethod.DELETE, "/products/*").hasAnyRole("USER")
 
 			//.antMatchers("/boards/**").hasAnyRole("USER") // 이거 요청하려면 USER 권한이 있어야합니다.
 			
@@ -80,8 +80,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
+	//위에 껄 이용해서 유저디테일서비스
 	//사용자의 상세 정보를 가져오는 서비스 객체를 Spring 관리 객체로 등록
 	//JwtAuthenticationFilter에서 사용
+	//부트에선 자동적으로 실행 리턴되는 것을 관리객체로 등록
+	//위에서 사용했으
 	@Bean
 	@Override
 	public UserDetailsService userDetailsServiceBean() throws Exception {
@@ -90,7 +93,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	//인증된 정보를 관리하는 객체를 Spring 관리 객체로 등록
-	//JwtAuthenticationFilter에서 사용
+	//AuthController에서 사용
+	//인증을 관리하는 자: 이제 사용할 예정. 미리 등록을 해놓음.
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
