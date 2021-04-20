@@ -61,9 +61,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.PUT, "/boards").hasAnyRole("USER")
 			.antMatchers(HttpMethod.DELETE, "/boards/*").hasAnyRole("USER")
 	
-			.antMatchers(HttpMethod.POST, "/products").hasAnyRole("USER")
-			.antMatchers(HttpMethod.PUT, "/products").hasAnyRole("USER")
-			.antMatchers(HttpMethod.DELETE, "/products/*").hasAnyRole("USER")
+			.antMatchers(HttpMethod.POST, "/products").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.PUT, "/products").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.DELETE, "/products/*").hasAnyRole("ADMIN")
 
 			//.antMatchers("/boards/**").hasAnyRole("USER") // 이거 요청하려면 USER 권한이 있어야합니다.
 			
